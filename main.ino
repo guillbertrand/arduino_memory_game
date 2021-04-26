@@ -10,7 +10,7 @@ int A = 444;
 // Pins Leds & Notes correspondance
 int leds[] = { 4,5,6,7 };
 int ledsNotes[] = { A, D, E, F };
-int buzzerPin = 3;
+int buzzerPin = 2;
 
 // input btn
 int blueButtonPin = 8;
