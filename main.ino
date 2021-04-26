@@ -28,9 +28,15 @@ int minorswingDurations[] = {250, 250, 500, 250, 100, 500};
 int minorswingLeds[][4] = {{4,5,6,7}, {4},{5},{6},{7}, {4,5,6,7}};
 int minorswingSize = sizeof(minorswing)/sizeof(minorswing[0]);
 
+// Victory tone
+int victory[] = {A, E, A, E};
+int victoryDurations[] = {250, 100, 100, 500};
+int victoryLeds[][4] = {{4,5,6,7}, {4,5,6,7}, {4,5,6,7}, {4,5,6,7}};
+int victorySize = sizeof(victory)/sizeof(victory[0]);
+
 // Error tone
-int error[] = {C, C, C,C, C, C};
-int errorDurations[] = {50, 100, 50,100, 50, 100};
+int error[] = {C, C, C, C, C, C, C, C};
+int errorDurations[] = {50, 100, 50,100, 50, 100, 50, 100};
 int errorLeds[][4] = {{7},{7},{7},{7},{7},{7}};
 int errorSize = sizeof(error)/sizeof(error[0]);
 
@@ -38,11 +44,11 @@ int maxLevel = 99;
 int randomArray[99]; 
 int inputArray[99];
 
-int runIntro = 0;
+int runIntro = 1;
 int level = 1;
 int breakLoop = 0;
 int difficulty = 1;
-int withSound = 0;
+int withSound = 1;
 
 void setup() {
   // setup leds
@@ -73,7 +79,7 @@ void loop() {
     if(runIntro) {
       delay(200);
       playSong(minorswing, minorswingDurations, minorswingLeds, minorswingSize);
-      delay(2000);
+      delay(1500);
       runIntro = 0;
     }
 
@@ -121,40 +127,77 @@ void mute(int duration) {
 }
 
 void input() {
-
+  int winThisLevel = 0;
   int count = 0;
   while(count < level) {
+      
+      if(digitalRead(redButtonPin) == HIGH) {
+          if(withSound) tone(buzzerPin,ledsNotes[3], 50);
+          digitalWrite(leds[3], HIGH);
+      }else {
+           digitalWrite(leds[3], LOW);
+      }
+      if(digitalRead(greenButtonPin) == HIGH) {
+          if(withSound) tone(buzzerPin,ledsNotes[2], 50);
+          digitalWrite(leds[2], HIGH);
+      }else {
+           digitalWrite(leds[2], LOW);
+      }
+      if(digitalRead(blueButtonPin) == HIGH) {
+          if(withSound) tone(buzzerPin,ledsNotes[0], 50);
+          digitalWrite(leds[0], HIGH);
+      }else {
+           digitalWrite(leds[0], LOW);
+      }
+      if(digitalRead(yellowButtonPin) == HIGH) {
+          if(withSound) tone(buzzerPin,ledsNotes[1], 50);
+          digitalWrite(leds[1], HIGH);
+      }else {
+           digitalWrite(leds[1], LOW);
+      }
+
       redBtn.update();
-      yellowBtn.update();
-      blueBtn.update();
-      greenBtn.update();
       if (redBtn.fell()) {
           inputArray[count] = 3;
           count++;
       }
+       greenBtn.update();
       if (greenBtn.fell()) {
           inputArray[count] = 2;
           count++;
       }
+      blueBtn.update();
       if (blueBtn.fell()) {
           inputArray[count] = 0;
           count++;
       }
+      yellowBtn.update();
       if (yellowBtn.fell()) {
           inputArray[count] = 1;
           count++;
       }
+
   }
+
+ 
   
   for(int ii=0;ii<level;ii++){
     if(inputArray[ii] != randomArray[ii]) {
+      delay(150);
       playSong(error, errorDurations, errorLeds, errorSize);
       delay(2000/difficulty);
       level = 0;
+      winThisLevel = 0;
     }
     else {
-      delay(100/difficulty);
+      winThisLevel = 1;
     }
+  }
+
+  if(winThisLevel) {
+      delay(350);
+      playSong(victory, victoryDurations, victoryLeds, victorySize);
+      delay(1000/difficulty);
   }
 
 }
