@@ -17,15 +17,15 @@ The equipment required for this project was:
 
 ## **Wiring**
 
-- pin 2 : buzzer pin
+-   pin 2 : buzzer pin
 
-- pin 4 : blue led pin
-- pin 5 : yellow led pin
-- pin 6 : green led pin
-- pin 7 : red led pin
+-   pin 4 : blue led pin
+-   pin 5 : yellow led pin
+-   pin 6 : green led pin
+-   pin 7 : red led pin
 
-- pin 8 : blue button pin
-- pin 9 : yellow button pin
-- pin 10 : green button pin
-- pin 11 : red button pin
+-   pin 8 : blue button pin
+-   pin 9 : yellow button pin
+-   pin 10 : green button pin
+-   pin 11 : red button pin
 
