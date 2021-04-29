@@ -1,4 +1,8 @@
 #include <Bounce2.h>
+#include <U8g2lib.h>
+
+//Initialize display.
+U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, A5, A4);
 
 // Notes frequencies
 int C = 262;
@@ -48,10 +52,34 @@ int runIntro = 1;
 int level = 1;
 int breakLoop = 0;
 int difficulty = 1;
-int withSound = 1;
+int withSound = 0;
 
-void setup()
+void drawIntro()
 {
+  u8g2.setFont(u8g_font_helvB12);
+  u8g2.drawStr(10,38,"Memory Game");
+
+  u8g2.drawRFrame(0,0, 128, 64, 10);
+}
+
+void draw(void)
+{
+  u8g2.setFont(u8g_font_helvB12);
+  u8g2.drawStr(10,22,"Memory Game");
+  u8g2.setFont(u8g_font_helvR10);
+  u8g2.setCursor(10, 52);
+  u8g2.print("Level : ");
+  u8g2.setCursor(70, 52);
+  u8g2.print(level);
+
+  u8g2.drawRFrame(0,0, 128, 64, 10);
+}
+
+void setup(void)
+{
+  u8g2.setBusClock(400000);
+  u8g2.begin();
+  
   // setup leds
   for (int i = 0; i < 4; i++)
   {
@@ -77,9 +105,22 @@ void setup()
   }
 }
 
-void loop()
-{
+void oledLoop(int intro) {     
+  u8g2.firstPage();  
+  do {
+    if(intro)
+      drawIntro();
+    else 
+      draw();
+  }
+  while (u8g2.nextPage());
+}
 
+void loop(void)
+{   
+  
+  oledLoop(1);
+  
   if (runIntro)
   {
     delay(200);
@@ -91,6 +132,7 @@ void loop()
   // Questions
   for (int i = 0; i < maxLevel; i++)
   {
+    oledLoop(0);
     for (int ii = 0; ii < level; ii++)
     {
       int index = randomArray[ii];
@@ -104,7 +146,10 @@ void loop()
     input();
 
     level += 1;
+
   }
+
+
 }
 
 void playSong(int song[], int durations[], int ledsSequence[][4], size_t songSize)
@@ -244,6 +289,6 @@ void input()
   {
     delay(350);
     playSong(victory, victoryDurations, victoryLeds, victorySize);
-    delay(1000 / difficulty);
+    delay(800 / difficulty);
   }
 }

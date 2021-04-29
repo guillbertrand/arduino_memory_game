@@ -5,7 +5,8 @@ basic "memory game"
 ## **Equipments**
 The equipment required for this project was:
 -	4 LEDs (red, yellow, green and blue)
--	Arduino Uno or Nano
+-	Arduino Nano every
+-   OLED I2C Display 128x64 SSD1306
 -	4 buttons with coloreds caps (red, yellow, green and blue)
 -	3 resistors 220Ω (for the red, green, yellow leds)
 -   1 resistor 10kΩ (for the blue led)
@@ -28,4 +29,7 @@ The equipment required for this project was:
 -   pin 9 : yellow button pin
 -   pin 10 : green button pin
 -   pin 11 : red button pin
+
+-   pin A4 : SDA Oled screen
+-   pin A5 : SCL Oled screen
 
