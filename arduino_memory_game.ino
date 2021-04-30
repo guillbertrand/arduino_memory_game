@@ -1,5 +1,6 @@
 #include <Bounce2.h>
 #include <U8g2lib.h>
+#include <EEPROM.h>
 
 //Initialize display.
 U8G2_SSD1306_128X64_NONAME_F_SW_I2C u8g2(U8G2_R0, A5, A4);
@@ -53,6 +54,7 @@ int level = 1;
 int breakLoop = 0;
 int difficulty = 1;
 int withSound = 0;
+int bestScore = 0;
 
 void drawIntro()
 {
@@ -66,17 +68,23 @@ void draw(void)
 {
   u8g2.setFont(u8g_font_helvB12);
   u8g2.drawStr(10,22,"Memory Game");
+  u8g2.setFont(u8g_font_helvR08);
+  u8g2.setCursor(10, 38);
+  u8g2.print("Best score : ");
+  u8g2.setCursor(90, 38);
+  u8g2.print(bestScore);
   u8g2.setFont(u8g_font_helvR10);
-  u8g2.setCursor(10, 52);
-  u8g2.print("Level : ");
-  u8g2.setCursor(70, 52);
-  u8g2.print(level);
+  u8g2.setCursor(10, 54);
+  u8g2.print("Score : ");
+  u8g2.setCursor(90, 54);
+  u8g2.print(level-1);
 
-  u8g2.drawRFrame(0,0, 128, 64, 10);
+  u8g2.drawRFrame(0,0, 128, 64, 4);
 }
 
 void setup(void)
 {
+  EEPROM.get(0,bestScore);
   u8g2.setBusClock(400000);
   u8g2.begin();
   
@@ -145,8 +153,10 @@ void loop(void)
     // Answer
     input();
 
-    level += 1;
+    if(level > bestScore)
+      EEPROM.put(0,level);
 
+    level += 1;
   }
 
 
@@ -275,9 +285,10 @@ void input()
     {
       delay(150);
       playSong(error, errorDurations, errorLeds, errorSize);
-      delay(2000 / difficulty);
+      delay(1200 / difficulty);
       level = 0;
       winThisLevel = 0;
+      EEPROM.get(0,bestScore);
     }
     else
     {
