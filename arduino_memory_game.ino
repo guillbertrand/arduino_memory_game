@@ -53,7 +53,7 @@ int runIntro = 1;
 int level = 1;
 int breakLoop = 0;
 int difficulty = 1;
-int withSound = 0;
+int withSound = 1;
 int bestScore = 0;
 
 void drawIntro()
@@ -85,7 +85,6 @@ void draw(void)
 void setup(void)
 {
   EEPROM.get(0,bestScore);
-  u8g2.setBusClock(400000);
   u8g2.begin();
   
   // setup leds
@@ -198,7 +197,7 @@ void mute(int duration)
 
 void playNoteIfKeyDown()
 {
-  if (digitalRead(redButtonPin) == HIGH)
+  if (digitalRead(redButtonPin) == LOW)
   {
     if (withSound)
       tone(buzzerPin, ledsNotes[3]);
@@ -208,7 +207,7 @@ void playNoteIfKeyDown()
   {
     digitalWrite(leds[3], LOW);
   }
-  if (digitalRead(greenButtonPin) == HIGH)
+  if (digitalRead(greenButtonPin) == LOW)
   {
     if (withSound)
       tone(buzzerPin, ledsNotes[2]);
@@ -218,7 +217,7 @@ void playNoteIfKeyDown()
   {
     digitalWrite(leds[2], LOW);
   }
-  if (digitalRead(blueButtonPin) == HIGH)
+  if (digitalRead(blueButtonPin) == LOW)
   {
     if (withSound)
       tone(buzzerPin, ledsNotes[0]);
@@ -228,7 +227,7 @@ void playNoteIfKeyDown()
   {
     digitalWrite(leds[0], LOW);
   }
-  if (digitalRead(yellowButtonPin) == HIGH)
+  if (digitalRead(yellowButtonPin) == LOW)
   {
     if (withSound)
       tone(buzzerPin, ledsNotes[1]);
@@ -250,28 +249,28 @@ void input()
     playNoteIfKeyDown();
 
     redBtn.update();
-    if (redBtn.fell())
+    if (redBtn.rose())
     {
       inputArray[count] = 3;
       count++;
       mute(1);
     }
     greenBtn.update();
-    if (greenBtn.fell())
+    if (greenBtn.rose())
     {
       inputArray[count] = 2;
       count++;
       mute(1);
     }
     blueBtn.update();
-    if (blueBtn.fell())
+    if (blueBtn.rose())
     {
       inputArray[count] = 0;
       count++;
       mute(1);
     }
     yellowBtn.update();
-    if (yellowBtn.fell())
+    if (yellowBtn.rose())
     {
       inputArray[count] = 1;
       count++;
